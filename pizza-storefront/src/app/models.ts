@@ -7,3 +7,10 @@ export interface PizzaDetails{
     toppings: string[]
     comments: string
 }
+
+export interface Order{
+    date:string
+    email:string
+    orderId: string
+    total: number
+}

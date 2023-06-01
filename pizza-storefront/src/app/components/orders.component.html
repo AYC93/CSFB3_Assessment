@@ -1,1 +1,9 @@
-<p>orders works!</p>
+<div>
+    <h2>Orders</h2>
+    <table *ngFor="let o of order$ |async">
+        <tr>{{ o.email }}</tr>
+        <tr>{{ o.date | date }}</tr>
+        <tr>{{ o.total }}</tr>
+    </table>
+    <a [routerLink]="['/']">Back to Ordering</a>
+  </div>

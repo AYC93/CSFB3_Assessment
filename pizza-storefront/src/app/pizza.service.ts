@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
-import { PizzaDetails } from "./models";
+import { Order, PizzaDetails } from "./models";
 
 @Injectable()
 export class PizzaService {
@@ -11,18 +11,16 @@ export class PizzaService {
   // Do not change the method name
   placeOrder(pizzaDetails: PizzaDetails) {
     
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    })
-
-    return this.http.post<any>('http://localhost:8080/api/order', pizzaDetails, { headers })
+    return this.http.post<any>('/api/order', pizzaDetails)
   }
 
   // TODO: Task 5
   // You may add any parameters and return any type from getOrders() method
   // Do not change the method name
-  getOrders() {
+  getOrders(email:string) {
+    const url ='/api/orders/${email}'
+    
+    return this.http.get<Order[]>(url)
   }
 
   // TODO: Task 7

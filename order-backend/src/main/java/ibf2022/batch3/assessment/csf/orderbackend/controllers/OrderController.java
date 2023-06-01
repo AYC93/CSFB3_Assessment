@@ -39,51 +39,45 @@ public class OrderController {
 
 	// TODO: Task 3 - POST /api/order
 	@PostMapping("/order")
-	public void createOrder(@RequestBody PizzaOrder pizzaOrder, HttpServletRequest req){
-		String [] toppingsArr = req.getParameterValues("toppings");
-		List<String> toppings = Arrays.asList(toppingsArr);
-
-		PizzaOrder order = new PizzaOrder();
-		order.setOrderId("null");// from pricing service, string
-		order.setDate(Date.valueOf(LocalDate.now())); // from pricing service, date
-		order.setTotal(9f); // from pricing service, float
-		order.setName("name");
-		order.setSauce("sauce");
-		order.setSize(Integer.parseInt("size"));
-		order.setComments("comments");
-		order.setTopplings(toppings);
-
-		ordRepo.add(order);
-		pendingOrdRepo.add(order);
-	}
-
-	//Task 4
-	@ResponseBody
-	@PostMapping(path="/order")
-	public ResponseEntity<String> clientPlaceOrder(@RequestBody PizzaOrder pizzaOrder){
+	public ResponseEntity<String> placeOrder(@RequestBody PizzaOrder pizzaOrder, HttpServletRequest req) {
 		try {
 			ordSvc.placeOrder(pizzaOrder);
+			String[] toppingsArr = req.getParameterValues("toppings");
+			List<String> toppings = Arrays.asList(toppingsArr);
+
+			PizzaOrder order = new PizzaOrder();
+			order.setOrderId(order.getOrderId()); // from pricing service, string
+			order.setDate(order.getDate()); // from pricing service, date
+			order.setTotal(order.getTotal()); // from pricing service, float
+			order.setName(pizzaOrder.getName());
+			order.setSauce(pizzaOrder.getSauce());
+			order.setSize(pizzaOrder.getSize());
+			order.setComments(pizzaOrder.getComments());
+			order.setTopplings(toppings);
+
+			ordRepo.add(order);
+			pendingOrdRepo.add(order);
+
 			return ResponseEntity.status(HttpStatus.ACCEPTED)
-							.body(Json.createObjectBuilder()
-							.add("orderId", pizzaOrder.getOrderId())
-							.add("date", pizzaOrder.getDate().toString())
-							.add("name", pizzaOrder.getName())
-							.add("email", pizzaOrder.getEmail())
-							.add("total", pizzaOrder.getTotal())
+					.body(Json.createObjectBuilder()
+							.add("orderId", order.getOrderId())
+							.add("date", order.getDate().toString())
+							.add("name", order.getName())
+							.add("email", order.getEmail())
+							.add("total", order.getTotal())
 							.build()
 							.toString());
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-								.body(Json.createObjectBuilder()
-								.add("error", e.getMessage())
-								.build().toString());
+					.body(Json.createObjectBuilder()
+							.add("error", e.getMessage())
+							.build()
+							.toString());
 		}
 	}
 
-
 	// TODO: Task 6 - GET /api/orders/<email>
-
-
+	
 	// TODO: Task 7 - DELETE /api/order/<orderId>
 
 }

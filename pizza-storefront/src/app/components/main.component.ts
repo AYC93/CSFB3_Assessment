@@ -65,6 +65,9 @@ export class MainComponent implements OnInit {
   onSubmit() {
     if (this.form.valid) {
       console.log(this.form.value)
+      const selectedToppings = this.form.value.toppings
+      .map((topping: boolean, i: number) => topping ? PIZZA_TOPPINGS[i] : null)
+      .filter((topping: string | null) => topping !== null);
       const data = this.form.value as PizzaDetails
       firstValueFrom(this.pizzaService.placeOrder(data)).then(
         v => {

@@ -3,8 +3,12 @@ package ibf2022.batch3.assessment.csf.orderbackend.respositories;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
+
 
 import ibf2022.batch3.assessment.csf.orderbackend.models.PizzaOrder;
 
@@ -13,8 +17,6 @@ public class OrdersRepository {
 
 	@Autowired
 	MongoTemplate mongoTemplate;
-
-	
 
 	/*
 	 * mongodb query:
@@ -31,8 +33,8 @@ public class OrdersRepository {
 	 * toppings: "[ chicken ]"
 	 * })
 	 */
-	
-	 // orderId to be auto generated in later task
+
+	// orderId to be auto generated in later task
 
 	// TODO: Task 3
 	// WARNING: Do not change the method's signature.
@@ -48,9 +50,22 @@ public class OrdersRepository {
 	// WARNING: Do not change the method's signature.
 	// Write the native MongoDB query in the comment below
 	// Native MongoDB query here for getPendingOrdersByEmail()
+	/*
+	 * db.orders.find(
+	 * { delivered: { $ne: true } },
+	 * { orderId: 1, date: 1, email: 1 , total: 1 } 
+	 * ).sort({ date: -1 });
+	 */
 	public List<PizzaOrder> getPendingOrdersByEmail(String email) {
-
-		return null;
+		
+		Query query = new Query();
+		query.addCriteria(Criteria.where("delivered").ne(true));
+		query.with(Sort.by(Sort.Direction.DESC, "date"));
+	
+		query.fields().include("orderId", "date", "email","total");
+	
+		List<PizzaOrder> orders = mongoTemplate.find(query, PizzaOrder.class);
+		return orders;
 	}
 
 	// TODO: Task 7
