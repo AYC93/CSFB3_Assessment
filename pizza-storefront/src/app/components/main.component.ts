@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { PizzaDetails } from '../models';
 import { Router } from '@angular/router';
 import { PizzaService } from '../pizza.service';
@@ -41,31 +41,28 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.createForm()
   }
-
-  createForm() {
-    return this.fb.group({
-      name: ['Ang Yi Ci', Validators.required],
-      email: ['ayc.leo@gmail.com', [Validators.required, Validators.email]],
-      size: [1, Validators.required],
-      base: ['', Validators.required],
-      sauce: ['', Validators.required],
-      toppings: [this.toppingsArr], // to come back to redo this part.
-      comments: [''],
-    })
+  
+  minToppings: ValidatorFn = (ctrl: AbstractControl): ValidationErrors | null => {
+    const valid = (ctrl as FormArray).controls.some(c => c.value)
+    return valid ? null : { minToppings: true }
   }
 
-  // validateToppings(toppingsArr: FormArray): ValidationErrors | null {
-  //   const selectedToppings = toppingsArr.controls
-  //     .filter(c => c.value)
-  //     .length
-  //   console.info(selectedToppings)
+  createForm(): FormGroup {
+    this.toppingsArr = this.fb.array(PIZZA_TOPPINGS.map(() => this.fb.control(false)));
+    this.toppingsArr.setValidators(this.minToppings);
+
+    return this.fb.group({
+      name: this.fb.control<string>('Ang Yi Ci', [Validators.required]),
+      email: this.fb.control<string>('ayc.leo@gmail.com', [Validators.required, Validators.email]),
+      size: this.fb.control<number>(1, [Validators.required]),
+      base: this.fb.control<string>('', [Validators.required]),
+      sauce: this.fb.control<string>('', [Validators.required]),
+      toppings: this.toppingsArr, // to come back to redo this part.
+      comments: (''),
+    })
+  }
   
-  //   if (selectedToppings === 0) {
-  //     return { noToppingsSelected: true };
-  //   }
-  
-  //   return null;
-  // }
+
 
   onSubmit() {
     if (this.form.valid) {
@@ -84,3 +81,7 @@ export class MainComponent implements OnInit {
 
   }
 }
+
+
+
+
