@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -18,6 +19,7 @@ import ibf2022.batch3.assessment.csf.orderbackend.models.PizzaOrder;
 import ibf2022.batch3.assessment.csf.orderbackend.respositories.OrdersRepository;
 import ibf2022.batch3.assessment.csf.orderbackend.respositories.PendingOrdersRepository;
 
+@Service
 public class OrderingService {
 
 	@Autowired
