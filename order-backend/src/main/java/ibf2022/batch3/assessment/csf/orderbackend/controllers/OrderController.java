@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ibf2022.batch3.assessment.csf.orderbackend.models.PizzaOrder;
 import ibf2022.batch3.assessment.csf.orderbackend.respositories.OrdersRepository;
 import ibf2022.batch3.assessment.csf.orderbackend.respositories.PendingOrdersRepository;
+import ibf2022.batch3.assessment.csf.orderbackend.services.OrderingService;
 import jakarta.json.Json;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -29,6 +30,9 @@ public class OrderController {
 
 	@Autowired
 	OrdersRepository ordRepo;
+
+	@Autowired
+	OrderingService ordSvc;
 
 	@Autowired
 	PendingOrdersRepository pendingOrdRepo;
@@ -58,6 +62,7 @@ public class OrderController {
 	@PostMapping(path="/order")
 	public ResponseEntity<String> clientPlaceOrder(@RequestBody PizzaOrder pizzaOrder){
 		try {
+			ordSvc.placeOrder(pizzaOrder);
 			return ResponseEntity.status(HttpStatus.ACCEPTED)
 							.body(Json.createObjectBuilder()
 							.add("orderId", pizzaOrder.getOrderId())
@@ -73,11 +78,6 @@ public class OrderController {
 								.add("error", e.getMessage())
 								.build().toString());
 		}
-	}
-
-	@PostMapping(path="/order")
-	public ResponseEntity<String> orderProcess(@RequestBody PizzaOrder pizzaOrder){
-		
 	}
 
 

@@ -61,8 +61,6 @@ export class MainComponent implements OnInit {
       comments: (''),
     })
   }
-  
-
 
   onSubmit() {
     if (this.form.valid) {

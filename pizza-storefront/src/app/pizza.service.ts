@@ -16,7 +16,7 @@ export class PizzaService {
       'Accept': 'application/json'
     })
 
-    return this.http.post('/api/order', pizzaDetails, { headers })
+    return this.http.post<any>('http://localhost:8080/api/order', pizzaDetails, { headers })
   }
 
   // TODO: Task 5

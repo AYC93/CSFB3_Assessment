@@ -1,17 +1,18 @@
 package ibf2022.batch3.assessment.csf.orderbackend.services;
 
-import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import ibf2022.batch3.assessment.csf.orderbackend.models.PizzaOrder;
 import ibf2022.batch3.assessment.csf.orderbackend.respositories.OrdersRepository;
@@ -57,14 +58,27 @@ public class OrderingService {
 										.collect(Collectors.toList()));
 		formData.add("comments", commentInput);
 
-		RequestEntity<Void> req = RequestEntity.get(URL)
-							.accept(MediaType.TEXT_PLAIN)
-							.build();
+		ResponseEntity<String> resp = restTemplate.exchange(URL, HttpMethod.POST, 
+							new HttpEntity<>(formData, headers), String.class);
+
+		String[] priceSvc = resp.getBody().split(",");
+
+		if (priceSvc.length!=3){
+			throw new OrderException("Invalid");
+		}
+
+		String orderId = priceSvc[0].trim();
+		float total = Float.parseFloat(priceSvc[2].trim());
+
+		// convert epoch time to Date
+		long epochTime = Long.parseLong(priceSvc[1].trim());
+		Date date = new Date(epochTime);
 		
+		order.setOrderId(orderId);
+		order.setDate(date);
+		order.setTotal(total);
 
-		MultiValueMap<String, String> req = new HttpEnt
-
-		return null;
+		return order;
 	}
 
 	public boolean thickCrustChecker(PizzaOrder order){
