@@ -57,7 +57,7 @@ export class MainComponent implements OnInit {
       size: this.fb.control<number>(1, [Validators.required]),
       base: this.fb.control<string>('', [Validators.required]),
       sauce: this.fb.control<string>('', [Validators.required]),
-      toppings: this.toppingsArr, // to come back to redo this part.
+      toppings: this.toppingsArr,
       comments: (''),
     })
   }

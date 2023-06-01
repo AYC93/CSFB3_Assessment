@@ -53,7 +53,7 @@ public class OrderController {
 		pendingOrdRepo.add(order);
 	}
 
-	//Task 5
+	//Task 4
 	@ResponseBody
 	@PostMapping(path="/order")
 	public ResponseEntity<String> clientPlaceOrder(@RequestBody PizzaOrder pizzaOrder){
@@ -74,6 +74,12 @@ public class OrderController {
 								.build().toString());
 		}
 	}
+
+	@PostMapping(path="/order")
+	public ResponseEntity<String> orderProcess(@RequestBody PizzaOrder pizzaOrder){
+		
+	}
+
 
 	// TODO: Task 6 - GET /api/orders/<email>
 
