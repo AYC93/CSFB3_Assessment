@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 const SIZES: string[] = [
   "Personal - 6 inches",
@@ -20,11 +21,16 @@ const PIZZA_TOPPINGS: string[] = [
 export class MainComponent {
 
   pizzaSize = SIZES[0]
+  form!:FormGroup
 
   constructor() { }
 
   updateSize(size: string) {
     this.pizzaSize = SIZES[parseInt(size)]
   }
+
+  
+
+
 
 }
