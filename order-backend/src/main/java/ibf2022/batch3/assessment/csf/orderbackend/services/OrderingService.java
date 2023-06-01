@@ -15,7 +15,7 @@ public class OrderingService {
 
 	@Autowired
 	private PendingOrdersRepository pendingOrdersRepo;
-	
+
 	// TODO: Task 5
 	// WARNING: DO NOT CHANGE THE METHOD'S SIGNATURE
 	public PizzaOrder placeOrder(PizzaOrder order) throws OrderException {

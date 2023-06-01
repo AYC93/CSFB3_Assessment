@@ -1,7 +1,7 @@
 export interface PizzaDetails{
     name: string
     email: string
-    pizzaSize: string
+    size: string
     base: string
     sauce: string
     toppings: string[]
